@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>AirGuard AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+</head>
+
+<body>
+
+<header>
+
+    <h1>🌍 AirGuard AI</h1>
+
+    <p>AI-Powered Urban Air Quality Intelligence Platform</p>
+    <div class="last-updated">
+
+        🕒 Last Updated:
+        <strong>{{ current_time }}</strong>
+
+    </div>
+</header>
+<div class="alert-banner">
+
+    <div class="alert-icon">
+
+        🚨
+
+    </div>
+
+    <div>
+
+        <h2>Air Quality Alert</h2>
+
+        <p>
+
+            <strong>Ward 18</strong> is predicted to reach
+            <strong>AQI 276</strong> within the next 24 hours.
+
+            Immediate intervention is recommended.
+
+        </p>
+
+        <p>
+
+            <strong>Primary Source:</strong>
+            Traffic Congestion
+
+            &nbsp; | &nbsp;
+
+            <strong>Recommended Action:</strong>
+            Restrict Heavy Diesel Vehicles
+
+        </p>
+
+    </div>
+
+</div>
+
+<div class="analysis-status">
+
+    <h2>🤖 AI Analysis Status</h2>
+
+    <div class="status-grid">
+
+        <div class="status-item">
+            ✅ AQI Forecast Generated
+        </div>
+
+        <div class="status-item">
+            ✅ Pollution Sources Identified
+        </div>
+
+        <div class="status-item">
+            ✅ Health Advisory Generated
+        </div>
+
+        <div class="status-item">
+            ✅ Cost Analysis Completed
+        </div>
+
+        <div class="status-item">
+            ✅ Municipal Action Plan Ready
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="cards">
+
+    <div class="card">
+
+    <h3>
+
+        <span class="status-dot green"></span>
+
+        Current AQI
+
+    </h3>
+
+    <h2>{{ data.current_aqi }}</h2>
+
+    <span class="badge poor">
+
+        🟠 Poor
+
+    </span>
+
+    <p class="trend increase">
+
+        ↑ 12 points since yesterday
+
+    </p>
+
+</div>
+
+    <div class="card">
+
+    <h3>
+
+    <span class="status-dot orange"></span>
+
+    Predicted AQI
+
+</h3>
+
+    <h2>{{ data.predicted_aqi }}</h2>
+
+    <span class="badge warning">
+
+        ⚠️ Tomorrow
+
+    </span>
+
+    <p class="trend increase">
+
+        ↑ Expected to increase by 33 points
+
+    </p>
+
+</div>
+
+    <div class="card">
+
+    <h3>
+
+    <span class="status-dot yellow"></span>
+
+    Risk Level
+
+</h3>
+
+    <h2>{{ data.risk }}</h2>
+
+    <span class="badge poor">
+
+        Moderate Health Risk
+
+    </span>
+
+    <p class="trend">
+
+        Sensitive groups should take precautions.
+
+    </p>
+
+</div>
+
+    <div class="card">
+
+    <h3>
+
+    <span class="status-dot red"></span>
+
+    High Risk Wards
+
+</h3>
+
+    <h2>{{ data.high_risk_wards }}</h2>
+
+    <span class="badge danger">
+
+        Immediate Attention
+
+    </span>
+
+    <p class="trend increase">
+
+        2 wards require urgent intervention
+
+    </p>
+
+</div>
+
+</div>
+
+<div class="section">
+
+    <h2>📈 AQI Trend</h2>
+
+    <canvas id="aqiChart"></canvas>
+
+</div>
+
+<div class="section">
+
+    <h2>🗺 Interactive Map</h2>
+
+    <div id="map"></div>
+
+</div>
+
+<div class="section">
+
+    <h2>🥧 Pollution Sources</h2>
+
+    <div class="chart-container">
+    <canvas id="sourceChart"></canvas>
+</div>
+
+</div>
+
+<div class="section">
+
+    <h2>💡 AI Recommendations</h2>
+
+    <div class="recommendation-container">
+
+    <div class="recommendation-card high">
+
+        <span class="priority">HIGH PRIORITY</span>
+
+        <h3>🚛 Restrict Heavy Diesel Vehicles</h3>
+
+        <p>
+
+            AI detected severe pollution caused by
+            traffic congestion in Ward 18.
+
+        </p>
+        <div class="confidence high-confidence">
+
+            🤖 AI Confidence: 96%
+
+        </div>
+        <p>
+
+            <strong>Expected AQI Reduction:</strong>
+
+            25–35 points
+
+        </p>
+
+    </div>
+
+    <div class="recommendation-card medium">
+
+        <span class="priority">MEDIUM PRIORITY</span>
+
+        <h3>🚧 Increase Water Sprinkling</h3>
+
+        <p>
+
+            Construction dust is contributing
+            significantly to PM2.5 levels.
+
+        </p>
+        <div class="confidence medium-confidence">
+
+            🤖 AI Confidence: 89%
+
+        </div>
+        <p>
+
+            <strong>Expected AQI Reduction:</strong>
+
+            10–15 points
+
+        </p>
+
+    </div>
+
+    <div class="recommendation-card low">
+
+        <span class="priority">LOW PRIORITY</span>
+
+        <h3>🌳 Promote Public Transport</h3>
+
+        <p>
+
+            Encourage metro and bus usage during
+            peak traffic hours.
+
+        </p>
+        <div class="confidence low-confidence">
+
+            🤖 AI Confidence: 82%
+
+        </div>
+        <p>
+
+            <strong>Expected AQI Reduction:</strong>
+
+            5–10 points
+
+        </p>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+    <h2>❤️ Health Advisory</h2>
+
+    <div class="health-container">
+
+    <div class="health-card">
+        <div class="health-icon">😷</div>
+
+        <div>
+
+            <h3>Wear an N95 Mask</h3>
+
+            <p>
+                Air quality is poor. An N95 mask helps reduce
+                exposure to harmful PM2.5 particles.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="health-card">
+
+        <div class="health-icon">🏃</div>
+
+        <div>
+
+            <h3>Limit Outdoor Activities</h3>
+
+            <p>
+                Avoid jogging or prolonged outdoor exercise,
+                especially during peak traffic hours.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="health-card">
+
+        <div class="health-icon">👶</div>
+
+        <div>
+
+            <h3>Protect Sensitive Groups</h3>
+
+            <p>
+                Children, elderly people and asthma patients
+                should remain indoors whenever possible.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+    <h2>🤖 AirGuard AI Assistant</h2>
+
+    <p>
+        Ask AI for recommendations or use quick actions below.
+    </p>
+
+    <div class="quick-actions">
+
+        <button onclick="askAI('highest risk ward')">
+            🚨 Highest Risk Ward
+        </button>
+
+        <button onclick="askAI('budget plan')">
+            💰 Budget Plan
+        </button>
+
+        <button onclick="askAI('cost analysis')">
+            📊 Cost vs Impact
+        </button>
+
+        <button onclick="askAI('action plan')">
+            📋 Action Plan
+        </button>
+
+    </div>
+
+    <input
+        id="userQuestion"
+        type="text"
+        placeholder="Example: Which ward needs immediate intervention?">
+
+    <button onclick="sendQuestion()">
+
+        Ask AI
+
+    </button>
+
+    <div id="aiResponse" class="ai-response">
+
+        AI response will appear here...
+
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script>
+
+    const wards = {{ wards | tojson }};
+
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+</body>
+
+</html>
